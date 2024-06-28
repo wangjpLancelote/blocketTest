@@ -1,23 +1,21 @@
 import { Link } from 'react-router-dom';
 
 import logo from '../logo.svg';
-import CardFormBox from '../components/Form';
+import FormBox from '../components/Form';
+import FormCard from '../components/FormCard'
+import { useState } from 'react';
+
 
 function Home() {
+  const [ editStatus, setEditStatus ] = useState<Boolean>(false)
   return (
     <header className="app-header">
       <img src={logo} className="app-logo" alt="logo" />
-      {/* <pre style={{ textAlign: 'left' }}>
-        <code>window.blocklet = {JSON.stringify(window.blocklet, null, 2)}</code>
-        
-      </pre> */}
-      <CardFormBox/>
-      {/* <Link className="app-link" to="/about">
-        About
-      </Link>
-      <a className="app-link" href="https://developer.blocklet.io/docs/" target="_blank" rel="noopener noreferrer">
-        Learn Blocklet
-      </a> */}
+      {
+        editStatus ? 
+        <FormBox data={{ userName: 'John', email: 'john@blocklet', phone: 123456789 }} onChangeEvent={() => setEditStatus(false)}/> :
+        <FormCard data={{ userName: 'John', email: 'john@blocklet', phone: 123456789 }} onChangeEdit={() => setEditStatus(true)}/>
+      }
     </header>
   );
 }

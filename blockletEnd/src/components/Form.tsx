@@ -1,13 +1,7 @@
-import React from 'react';
-
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import CardActions from '@mui/material/CardActions';
-import { Box } from '@mui/material';
-import Button from '@mui/material/Button';
+import React, { useRef } from 'react';
+import { Box, InputAdornment, IconButton, CardActions, CardContent, Card, Button, TextField } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
-import TextField from '@mui/material/TextField';
+import { Clear } from '@mui/icons-material';
 
 interface FormData {
   userName: string,
@@ -15,49 +9,87 @@ interface FormData {
   phone: number
 }
 
+interface FormProps {
+  data: FormData;
+  onChangeEvent?: (...args: any) => void
+}
 
-const CardFormBox: React.FC<Partial<FormData>> = (props: Partial<FormData>) => {
-  const { handleSubmit, control, formState: { errors } } = useForm();
+
+const FormBox: React.FC<FormProps> = (props: FormProps) => {
+  const { data, onChangeEvent } = props;
+  const { handleSubmit, control, formState: { errors }, reset } = useForm({
+    defaultValues: data
+  });
+  const formRef = useRef<HTMLFormElement>(null)
 
   const onSubmit = (data: any) => {
+    onChangeEvent && onChangeEvent();
     console.log(data);
   };
 
+   const clearField = (fieldName: string) => {
+    reset({ [fieldName]: '' });
+  };
+
   return (
-    <Box component={"form"} onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
+    <Box component={"form"} onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }} ref={formRef}>
       <Card sx={{ maxWidth: 768 }}>
       <CardContent>
         <Controller
-        name="firstName"
+        name="userName"
         control={control}
         defaultValue=""
-        rules={{ required: 'First name is required' }}
+        rules={{ required: 'userName is required' }}
         render={({ field }) => (
           <TextField
             {...field}
-            label="First Name"
+            label="userName"
             variant="outlined"
             margin="normal"
             fullWidth
-            error={!!errors.firstName}
-            helperText={errors.firstName ? (errors.firstName.message as string) : ''}
+            error={!!errors.userName}
+            helperText={errors.userName ? (errors.userName.message as string) : ''}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  {field.value && (
+                    <IconButton onClick={() => clearField('userName')} size="small">
+                      <Clear />
+                    </IconButton>
+                  )}
+                </InputAdornment>
+              )
+            }}
           />
         )}
       />
       <Controller
-        name="lastName"
+        name="phone"
         control={control}
-        defaultValue=""
-        rules={{ required: 'Last name is required' }}
+        rules={{ required: 'Phone is required', pattern: {
+            value: /\d+/,
+            message: 'Invalid phone number'
+          } }}
         render={({ field }) => (
           <TextField
             {...field}
-            label="Last Name"
+            label="Phone"
             variant="outlined"
             margin="normal"
             fullWidth
-            error={!!errors.lastName}
-            helperText={errors.lastName ? (errors.lastName.message as string) : ''}
+            error={!!errors.phone}
+            helperText={errors.phone ? (errors.phone.message as string) : ''}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  {field.value && (
+                    <IconButton onClick={() => clearField('phone')} size="small">
+                      <Clear />
+                    </IconButton>
+                  )}
+                </InputAdornment>
+              )
+            }}
           />
         )}
       />
@@ -81,13 +113,24 @@ const CardFormBox: React.FC<Partial<FormData>> = (props: Partial<FormData>) => {
             fullWidth
             error={!!errors.email}
             helperText={errors.email ? (errors.email.message as string) : ''}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  {field.value && (
+                    <IconButton onClick={() => clearField('email')} size="small">
+                      <Clear />
+                    </IconButton>
+                  )}
+                </InputAdornment>
+              )
+            }}
           />
         )}
       />
       </CardContent>
       <CardActions sx={{ display: 'flex', justifyContent: 'center' }}>
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Button size="small">Submit</Button>
+          <Button type='submit' size="small">Submit</Button>
         </Box>
       </CardActions>
     </Card>
@@ -95,4 +138,4 @@ const CardFormBox: React.FC<Partial<FormData>> = (props: Partial<FormData>) => {
   )
 }
 
-export default CardFormBox
+export default FormBox

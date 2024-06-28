@@ -42,6 +42,7 @@
     "@blocklet/sdk": "^1.16.20",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@mui/icons-material": "^5.15.20",
     "@mui/material": "^5.15.20",
     "@ocap/client": "^1.18.108",
     "@ocap/mcrypto": "^1.18.108",
