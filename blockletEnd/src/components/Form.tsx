@@ -2,15 +2,11 @@ import React, { useRef } from 'react';
 import { Box, InputAdornment, IconButton, CardActions, CardContent, Card, Button, TextField } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { Clear } from '@mui/icons-material';
-
-interface FormData {
-  userName: string,
-  email: string,
-  phone: number
-}
+import { IUserData } from '../types/user';
+import axios from '../libs/api'
 
 interface FormProps {
-  data: FormData;
+  data: IUserData;
   onChangeEvent?: (...args: any) => void
 }
 
@@ -22,9 +18,11 @@ const FormBox: React.FC<FormProps> = (props: FormProps) => {
   });
   const formRef = useRef<HTMLFormElement>(null)
 
-  const onSubmit = (data: any) => {
-    onChangeEvent && onChangeEvent();
-    console.log(data);
+  const onSubmit = async (data: any) => {
+    const rt = await axios.post('/api/users', { ...data })
+    if (rt && rt.status === 200) {
+      onChangeEvent && onChangeEvent(data);
+    }
   };
 
    const clearField = (fieldName: string) => {

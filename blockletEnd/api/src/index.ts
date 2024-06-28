@@ -10,6 +10,7 @@ import fallback from '@blocklet/sdk/lib/middlewares/fallback';
 
 import logger from './libs/logger';
 import routes from './routes';
+import db from './db/db';
 
 dotenv.config();
 
@@ -22,6 +23,9 @@ app.use(cookieParser());
 app.use(express.json({ limit: '1 mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1 mb' }));
 app.use(cors());
+
+app.locals.db = db;
+
 
 const router = express.Router();
 router.use('/api', routes);

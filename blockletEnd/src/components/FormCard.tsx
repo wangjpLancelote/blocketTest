@@ -1,22 +1,18 @@
 import React from 'react';
 import { Grid, Typography, Card, CardContent, Box } from '@mui/material';
 import { Edit } from '@mui/icons-material';
+import { IUserData } from '../types/user';
 
-interface IFormCardDdata {
-  userName: string,
-  email: string,
-  phone: number
-}
 
 interface IFormCard {
-  data: IFormCardDdata;
+  data: IUserData;
   onChangeEdit?: (...args: any) => void
 }
 
 
 const FormCard: React.FC<IFormCard> = ({ data, onChangeEdit }: IFormCard) => {
 
-  const keys = Object.keys(data) as (keyof IFormCardDdata)[]
+  const keys = Object.keys(data) as (keyof IUserData)[]
 
   return (
     <Card sx={{ maxWidth: 768 }}>
